@@ -1,4 +1,4 @@
-# DIY tunneling solution
+# @ziolko/tunnel - DIY tunneling solution
 
 This is an instruction on setting up a simple tunneling solution that is reliable, flexible and low-cost. It requires a Linux server with a public IP (you can get one for a low price at [contabo.com](https://contabo.com/)) and a domain.
 
@@ -27,9 +27,9 @@ You need to follow these steps only once. I highly discourage you from running o
 1. Create a Linux instance with HTTP and HTTPS traffic allowed
 2. [Install Caddy](https://caddyserver.com/docs/install#debian-ubuntu-raspbian)
 3. Open Caddy config file: `sudo vim /etc/caddy/Caddyfile` and paste content of the Caddyfile from this repository
-4. Reload Caddy configuration from `sudo systemctl reload caddy`
-5. Create DNS wildcard record e.g. `*.proxy.dev.io` (if you use Cloudflare disable their proxy for this DNS entry)
-6. visit your domain https://8080.proxy.dev.io - it should say that it couldn't connect to the service at this port. This means the reverse proxy server is up and running.
+4. Reload Caddy configuration with `sudo systemctl reload caddy`
+5. Create a wildcard DNS record for your domain e.g. `*.proxy.dev.io` (if you use Cloudflare disable their proxy for this DNS entry)
+6. Visit your domain https://8080.proxy.dev.io - it should say that it couldn't connect to the service at this port. This means the reverse proxy server is up and running.
 
 ### Optional configuration steps
 

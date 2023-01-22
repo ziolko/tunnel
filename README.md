@@ -33,8 +33,8 @@ You need to follow these steps only once. I highly discourage you from running o
 
 ### Optional configuration steps
 
-1. Add your SSH public key to `~/.ssh/authorized_keys` on the server to start a tunnel without providing passwords
-2. If you want to bind to "well-known ports" on the tunneling server (e.g. standard SMTP ports) and connect to the tunneling server as a non-root user you need to run `sudo echo 'net.ipv4.ip_unprivileged_port_start=0' >> /etc/sysctl.conf && sudo sysctl -p`.
+1. Add your SSH public key to `~/.ssh/authorized_keys` on the server to start tunnels without providing passwords
+2. If you want to bind to "well-known ports" on the tunneling server (ports lower than 1024 e.g. standard SMTP ports) and you connect to the tunneling server as a non-root user you need to run `sudo echo 'net.ipv4.ip_unprivileged_port_start=0' >> /etc/sysctl.conf && sudo sysctl -p` on the server.
 
 ### Exposing TCP traffic
 

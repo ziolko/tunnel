@@ -21,7 +21,7 @@
 http:// {
     import subdomain_port {host}
     redir @valid https://{host}{uri}
-    respond "Unable to find proxy port number in the domain name {host}. (Powered by ziolko-proxy)"
+    respond "Unable to find proxy port number in the domain name {host}. (Powered by @ziolko/tunnel)"
 }
 
 https:// {
@@ -31,13 +31,13 @@ https:// {
 
     import subdomain_port {host}
     
-    respond @reserved "Please pick another port because this one is reserved. (Powered by ziolko-proxy)"        
-    respond @invalid "Unable to find proxy port number in the domain name {host} (Powered by ziolko-proxy)"
+    respond @reserved "Please pick another port because this one is reserved. (Powered by @ziolko/tunnel)"        
+    respond @invalid "Unable to find proxy port number in the domain name {host} (Powered by @ziolko/tunnel)"
     reverse_proxy @valid localhost:{subdomain_port}
 
     handle_errors {
         @badGateway `{err.status_code} == 502`                
-        respond @badGateway "Unable to connect to service at port {subdomain_port}. Please check if the service is running there. (Powered by ziolko-proxy)"               
+        respond @badGateway "Unable to connect to service at port {subdomain_port}. Please check if the service is running there. (Powered by @ziolko/tunnel)"               
     }
 } 
 

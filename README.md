@@ -1,6 +1,6 @@
 # DIY tunneling solution
 
-This is an instruction on setting up a simply tunneling solution that is reliable, flexible low-cost. It requires a Linux server with a public IP (you can get one for a low price at [contabo.com](https://contabo.com/)) and domain.
+This is an instruction on setting up a simple tunneling solution that is reliable, flexible and low-cost. It requires a Linux server with a public IP (you can get one for a low price at [contabo.com](https://contabo.com/)) and a domain.
 
 ## Usage
 
@@ -16,7 +16,7 @@ Assuming your tunneling server is available at `ssh.proxy.dev.io` and your appli
 ssh -o ServerAliveInterval=60 -R 8080:localhost:3000 root@ssh.proxy.dev.io
 ```
 
-With this setup your application will be publicly available at https://8080.proxy.dev.io. The `8080` part of the address directly refers to the `<remote-port>` part from the `ssh` command.  Additionally, you can connect to the same port with e.g. https://one.8080.proxy.dev.io, https://two.8080.proxy.dev.io or https://awesome.8080.proxy.dev.io
+With this setup your application will be publicly available at https://8080.proxy.dev.io. The `8080` part of the address directly refers to the `<remote-port>` part from the above command.  Additionally, you can connect to the same port with e.g. https://one.8080.proxy.dev.io, https://two.8080.proxy.dev.io or https://awesome.8080.proxy.dev.io
 
 You can tunnel as many applications as you want as long as you tunnel them to different ports.
 
@@ -34,5 +34,14 @@ You need to follow these steps only once. I highly discourage you from running o
 ### Optional configuration steps
 
 1. Add your SSH public key to `~/.ssh/authorized_keys` on the server to start a tunnel without providing passwords
-2. To expose tunneled ports on the host server run:  `sudo echo 'GatewayPorts yes' >> /etc/ssh/sshd_config && sudo systemctl restart ssh.service`. After restarting the SSH tunnel you should be able to connect to the tunneled port directly (e.g. `http://direct.proxy.dev.io:8080`)
-3. If you want to bind to "well-known ports" on the tunneling server (e.g. standard SMTP ports) and connect to the tunneling server as a non-root user you need to run `sudo echo 'net.ipv4.ip_unprivileged_port_start=0' >> /etc/sysctl.conf && sudo sysctl -p`.
+2. If you want to bind to "well-known ports" on the tunneling server (e.g. standard SMTP ports) and connect to the tunneling server as a non-root user you need to run `sudo echo 'net.ipv4.ip_unprivileged_port_start=0' >> /etc/sysctl.conf && sudo sysctl -p`.
+
+### Exposing TCP traffic
+
+Sometimes you need to expose TCP port directly (e.g. to temporairly expose local database server). To enable this on the tunneling server run  `sudo echo 'GatewayPorts clientspecified' >> /etc/ssh/sshd_config && sudo systemctl restart ssh.service`. With this setup in place you can control if a port is directly exposed by adding `*:` before `<remote-port>`: 
+
+```
+ssh -o ServerAliveInterval=60 -R *:8080:localhost:3000 root@ssh.proxy.dev.io
+```
+
+Notice that your service provider/firewall may by default block most of the ports so you might need to do some additional configuration.

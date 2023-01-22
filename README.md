@@ -16,7 +16,7 @@ Assuming your tunneling server is available at `ssh.proxy.dev.io` and your appli
 ssh -o ServerAliveInterval=60 -R 8080:localhost:3000 root@ssh.proxy.dev.io
 ```
 
-With this setup your application will be publicly available at https://8080.proxy.dev.io. The `8080` part of the address directly refers to the `<remote-port>` part from the command above.  Additionally, you can connect to the same port with e.g. https://one.8080.proxy.dev.io, https://two.8080.proxy.dev.io or https://awesome.8080.proxy.dev.io. The server takes care of getting a valid SSL certificate for all the supported domains.
+With this setup your application will be publicly available at https://8080.proxy.dev.io. The `8080` part of the address directly refers to the `<remote-port>` part from the command above.  Additionally, you can connect to the same port with e.g. https://one.8080.proxy.dev.io, https://two.8080.proxy.dev.io or https://awesome.8080.proxy.dev.io. The server takes care of getting valid SSL certificates for all the supported domains.
 
 You can tunnel as many applications as you want as long as you tunnel them to different ports.
 

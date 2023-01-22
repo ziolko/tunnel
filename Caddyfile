@@ -1,0 +1,50 @@
+{
+    on_demand_tls {
+        interval 2m
+        burst 10
+        ask "http://localhost:33214"
+    }
+}
+
+# A snippet with a couple of useful matchers
+(subdomain_port) {
+    map {args.0} {subdomain_port} {
+        ~^([^.]+\.)?(\d+)\..+\.[^\d]+$ "${2}"
+        default "0"
+    }
+    @reserved `{subdomain_port} in ["80", "22", "443"]`
+    @valid `{subdomain_port} != "0"`
+    @invalid `{subdomain_port} == "0"`
+}
+
+# Browsers start with HTTP request, so if the domain name is invalid, return an error message to avoid trying to get certificate
+http:// {
+    import subdomain_port {host}
+    redir @valid https://{host}{uri}
+    respond "Unable to find proxy port number in the domain name {host}. (Powered by ziolko-proxy)"
+}
+
+https:// {
+    tls {
+            on_demand
+    }
+
+    import subdomain_port {host}
+    
+    respond @reserved "Please pick another port because this one is reserved. (Powered by ziolko-proxy)"        
+    respond @invalid "Unable to find proxy port number in the domain name {host} (Powered by ziolko-proxy)"
+    reverse_proxy @valid localhost:{subdomain_port}
+
+    handle_errors {
+        @badGateway `{err.status_code} == 502`                
+        respond @badGateway "Unable to connect to service at port {subdomain_port}. Please check if the service is running there. (Powered by ziolko-proxy)"               
+    }
+} 
+
+# Utility endpoint to reduce number of requested certificates to domains with port in name
+http://localhost:33214 {
+    import subdomain_port {query.domain}
+	
+    respond @valid 200
+    respond 400
+}

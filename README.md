@@ -1,4 +1,4 @@
-# @ziolko/tunnel - DIY tunneling solution
+# @ziolko/tunnel - DIY tunneling solution for developers
 
 This is an instruction on setting up a simple tunneling solution that is reliable, flexible and low-cost. It requires a Linux server with a public IP (I use [contabo.com](https://contabo.com/) but any VPS provider would do) and a domain.
 
@@ -38,7 +38,7 @@ I highly discourage you from running any other services on the tunneling server.
 1. Add your SSH public key to `~/.ssh/authorized_keys` on the server to start tunnels without providing passwords
 2. If you want to bind to "well-known ports" on the tunneling server (ports lower than 1024 e.g. standard SMTP ports) and you connect to the tunneling server as a non-root user you need to run `sudo echo 'net.ipv4.ip_unprivileged_port_start=0' >> /etc/sysctl.conf && sudo sysctl -p` on the server.
 
-### Exposing TCP traffic
+## Exposing TCP traffic
 
 Sometimes you need to expose TCP port directly (e.g. to temporarily expose local database server). To enable this on the tunneling server run  `sudo echo 'GatewayPorts clientspecified' >> /etc/ssh/sshd_config && sudo systemctl restart ssh.service`. With this setup in place you can control if a port is directly exposed by adding `*:` before `<remote-port>`: 
 

@@ -4,7 +4,7 @@ This is an instruction on setting up a simple tunneling solution that is reliabl
 
 ## Usage
 
-Once you configure the tunneling server (see below), you can start a tunnel from your local machine using `ssh`:
+After you configure the tunneling server (see instruction below), you can start a tunnel from your local machine using `ssh`:
 
 ```
 ssh -o ServerAliveInterval=60 -R <remote-port>:localhost:<local-port> root@<tunnelling-server-url>
@@ -22,7 +22,7 @@ You can tunnel as many applications as you want as long as you tunnel them to di
 
 ## Setting up the tunneling server
 
-You need to follow these steps only once. I highly discourage you from running other services on the tunneling server.
+You need to follow these steps only once and they should take no more than 20min.
 
 1. Create a Linux instance with HTTP and HTTPS traffic allowed
 2. [Install Caddy](https://caddyserver.com/docs/install#debian-ubuntu-raspbian)
@@ -31,6 +31,8 @@ You need to follow these steps only once. I highly discourage you from running o
 5. Create a wildcard DNS record for your domain e.g. `*.proxy.dev.io` (if you use Cloudflare disable their proxy for this DNS entry)
 6. Visit your domain https://8080.proxy.dev.io - it should say that it couldn't connect to the service at this port. This means the reverse proxy server is up and running.
 
+I highly discourage you from running any other services on the tunneling server.
+
 ### Optional configuration steps
 
 1. Add your SSH public key to `~/.ssh/authorized_keys` on the server to start tunnels without providing passwords
@@ -38,7 +40,7 @@ You need to follow these steps only once. I highly discourage you from running o
 
 ### Exposing TCP traffic
 
-Sometimes you need to expose TCP port directly (e.g. to temporairly expose local database server). To enable this on the tunneling server run  `sudo echo 'GatewayPorts clientspecified' >> /etc/ssh/sshd_config && sudo systemctl restart ssh.service`. With this setup in place you can control if a port is directly exposed by adding `*:` before `<remote-port>`: 
+Sometimes you need to expose TCP port directly (e.g. to temporarily expose local database server). To enable this on the tunneling server run  `sudo echo 'GatewayPorts clientspecified' >> /etc/ssh/sshd_config && sudo systemctl restart ssh.service`. With this setup in place you can control if a port is directly exposed by adding `*:` before `<remote-port>`: 
 
 ```
 ssh -o ServerAliveInterval=60 -R *:8080:localhost:3000 root@ssh.proxy.dev.io

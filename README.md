@@ -1,6 +1,6 @@
 # @ziolko/tunnel - DIY tunneling solution
 
-This is an instruction on setting up a simple tunneling solution that is reliable, flexible and low-cost. It requires a Linux server with a public IP (you can get one for a low price at [contabo.com](https://contabo.com/)) and a domain.
+This is an instruction on setting up a simple tunneling solution that is reliable, flexible and low-cost. It requires a Linux server with a public IP (I use [contabo.com](https://contabo.com/) but any VPS provider would do) and a domain.
 
 ## Usage
 

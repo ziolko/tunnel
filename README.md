@@ -7,13 +7,15 @@ This is an instruction on setting up a simple tunneling solution that is reliabl
 After you configure the tunneling server (see instructions below), you can start a tunnel from your local machine using `ssh`:
 
 ```
-ssh -o ServerAliveInterval=60 -R <remote-port>:localhost:<local-port> root@<tunnelling-server-url>
+$ ssh -TN -o ServerAliveInterval=60 -R <remote-port>:localhost:<local-port> root@<tunnelling-server-url>
+
+# -TN  prevents ssh from creating an interactive session
 ```
 
 Assuming your tunneling server is available at `ssh.proxy.dev.io` and your application locally is running at port 3000 you can run the following command:
 
 ```
-ssh -o ServerAliveInterval=60 -R 8080:localhost:3000 root@ssh.proxy.dev.io
+ssh -TN -o ServerAliveInterval=60 -R 8080:localhost:3000 root@ssh.proxy.dev.io
 ```
 
 With this setup, your application will be publicly available at https://8080.proxy.dev.io. The `8080` part of the address directly refers to the `<remote-port>` part from the command above.  Additionally, you can connect to the same port with e.g. https://one.8080.proxy.dev.io, https://two.8080.proxy.dev.io, or https://awesome.8080.proxy.dev.io. The server takes care of getting valid SSL certificates for all the supported domains.
@@ -43,7 +45,7 @@ I highly discourage you from running any other services on the tunneling server.
 Sometimes you need to expose the TCP port directly (e.g., temporarily expose the local database server). To enable this on the tunneling server run  `sudo echo 'GatewayPorts clientspecified' >> /etc/ssh/sshd_config && sudo systemctl restart ssh.service`. With this setup in place, you can control if a port is directly exposed by adding `*:` before `<remote-port>`: 
 
 ```
-ssh -o ServerAliveInterval=60 -R *:8080:localhost:3000 root@ssh.proxy.dev.io
+ssh -TN -o ServerAliveInterval=60 -R *:8080:localhost:3000 root@ssh.proxy.dev.io
 ```
 
 Notice that your service provider/firewall may block most of the ports so you may need to do some additional configuration.
